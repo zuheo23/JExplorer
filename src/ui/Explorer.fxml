@@ -38,7 +38,7 @@
    <bottom>
       <AnchorPane prefHeight="29.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
-            <Label layoutX="12.0" layoutY="4.0" prefHeight="21.0" prefWidth="577.0" />
+            <Label fx:id="lblInfo" layoutX="12.0" layoutY="4.0" prefHeight="21.0" prefWidth="577.0" />
          </children>
       </AnchorPane>
    </bottom>
@@ -51,14 +51,13 @@
                     <items>
                       <AnchorPane maxHeight="100.0" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                            <children>
-                              <TextField layoutX="12.0" layoutY="8.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="8.0" />
-                              <Button layoutX="14.0" layoutY="45.0" mnemonicParsing="false" text="Search" />
-                              <Button layoutX="75.0" layoutY="45.0" maxHeight="100.0" mnemonicParsing="false" text="Go to" />
+                              <TextField fx:id="tfPath" layoutX="12.0" layoutY="8.0" onKeyPressed="#handleKeyPressed" promptText="Enter Path" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="8.0" />
+                              <Button fx:id="goTo" layoutX="14.0" layoutY="42.0" maxHeight="100.0" mnemonicParsing="false" onMouseClicked="#chgDir" text="Go to" />
                            </children>
                         </AnchorPane>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
                            <children>
-                              <TreeView layoutX="-13.0" prefHeight="256.0" prefWidth="173.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                              <TreeView fx:id="tvDirs" layoutX="-13.0" prefHeight="256.0" prefWidth="173.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                            </children>
                         </AnchorPane>
                     </items>
@@ -67,7 +66,7 @@
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <ListView layoutX="142.0" layoutY="59.0" prefHeight="348.0" prefWidth="417.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <ListView fx:id="lvFiles" layoutX="142.0" layoutY="59.0" prefHeight="348.0" prefWidth="417.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                </children>
             </AnchorPane>
         </items>
