@@ -13,13 +13,20 @@ import java.nio.file.Paths;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.util.Callback;
 import ui.util.DirectoryCollector;
 
 /**
@@ -68,6 +75,23 @@ public class ExplorerController implements Initializable {
     }
 
     @FXML
+    public void closeApp() {
+        Platform.exit();
+    }
+
+    @FXML
+    public void showAbout() {
+        try {
+            Alert about = new Alert(AlertType.INFORMATION);
+            about.setTitle("About Java Explorer");
+            about.setDialogPane(FXMLLoader.load(getClass().getResource("DlgAbout.fxml")));
+            about.showAndWait();
+        } catch (IOException ex) {
+            Logger.getLogger(ExplorerController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    @FXML
     public void handleKeyPressed(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
             chgDir();
@@ -81,9 +105,9 @@ public class ExplorerController implements Initializable {
             Files.walkFileTree(cwd, pd);
             pd.root.setExpanded(true);
             tvDirs.setRoot(pd.root);
-
         } catch (IOException ex) {
             Logger.getLogger(ExplorerController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
 }
