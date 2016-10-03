@@ -14,18 +14,20 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 import ui.util.DirectoryCollector;
 
@@ -42,6 +44,8 @@ public class ExplorerController implements Initializable {
     private Label lblInfo;
     @FXML
     private TreeView<String> tvDirs;
+    @FXML
+    private ListView<String> lvFiles;
 
     private UI ui;
 
@@ -90,12 +94,20 @@ public class ExplorerController implements Initializable {
             Logger.getLogger(ExplorerController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     @FXML
     public void handleKeyPressed(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
             chgDir();
         }
+    }
+    
+    @FXML
+    public void goUpOneLevel() {
+        cwd = cwd.resolve("..").normalize();
+        tfPath.setText(cwd.toString());
+        System.out.println("CWD: " + cwd.toString());
+        chgDir();
     }
 
     private void getAllDirs() {
@@ -105,6 +117,51 @@ public class ExplorerController implements Initializable {
             Files.walkFileTree(cwd, pd);
             pd.root.setExpanded(true);
             tvDirs.setRoot(pd.root);
+            tvDirs.setCellFactory(new Callback<TreeView<String>, TreeCell<String>>() {
+                @Override
+                public TreeCell<String> call(TreeView<String> param) {
+                    TreeCell<String> cell;
+                    cell = new TreeCell<String>() {
+                        @Override
+                        public void updateItem(String item, boolean empty) {
+                            super.updateItem(item, empty);
+                            if (empty) {
+                                setText(null);
+                            } else {
+                                setText(item);
+                            }
+                        }
+                    };
+                    cell.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent e) {
+                            if (!cell.isEmpty()) {
+                                if (e.getClickCount() == 2) {
+                                    cwd = Paths.get(cell.getItem());
+                                    System.out.println(cwd.getFileName());
+                                    tfPath.setText(cwd.toString());
+                                    chgDir();
+                                } else if (e.getClickCount() == 1) {
+                                    try {
+                                        Path fileDir = Paths.get(cell.getItem());
+                                        DirectoryCollector.PrintDirectories pd2 = new DirectoryCollector.PrintDirectories();
+                                        Files.walkFileTree(fileDir, pd2);
+                                        if (!pd2.files.isEmpty()) {
+                                            lvFiles.setItems(pd2.files);
+                                        } else {
+                                            lvFiles.setItems(null);
+                                        }
+                                        
+                                    } catch (IOException ex) {
+                                        Logger.getLogger(ExplorerController.class.getName()).log(Level.SEVERE, null, ex);
+                                    }
+                                }
+                            }
+                        }
+                    });
+                    return cell;
+                }
+            });
         } catch (IOException ex) {
             Logger.getLogger(ExplorerController.class.getName()).log(Level.SEVERE, null, ex);
         }

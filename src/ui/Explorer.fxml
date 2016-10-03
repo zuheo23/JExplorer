@@ -48,6 +48,7 @@
                            <children>
                               <TextField fx:id="tfPath" layoutX="12.0" layoutY="8.0" onKeyPressed="#handleKeyPressed" promptText="Enter Path" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="8.0" />
                               <Button fx:id="goTo" layoutX="14.0" layoutY="42.0" maxHeight="100.0" mnemonicParsing="false" onMouseClicked="#chgDir" text="Go to" />
+                              <Button layoutX="71.0" layoutY="42.0" mnemonicParsing="false" onMouseClicked="#goUpOneLevel" text="Up" />
                            </children>
                         </AnchorPane>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">

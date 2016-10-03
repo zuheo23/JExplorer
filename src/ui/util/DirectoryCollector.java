@@ -18,6 +18,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TreeItem;
 
 /**
@@ -31,6 +34,7 @@ public class DirectoryCollector {
 
         public static TreeItem<String> root = null;
         public static TreeItem<String> ptr = null;
+        public static ObservableList<String> files = null;
         public static Path rootPath = null;
         public static Path ptrPath = null;
         public static Set<String> tracker = new HashSet<String>();
@@ -54,7 +58,17 @@ public class DirectoryCollector {
             ptrPath = null;
             tracker = new HashSet<String>();
             rootNameCount = 0;
-            
+            files = null;
+            files = FXCollections.observableArrayList();
+        }
+
+        @Override
+        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+            if (file.getParent().equals(rootPath)) {
+                System.out.format("FILE: %s%n",file.getFileName());
+                files.add(file.toString());
+            }
+            return CONTINUE;
         }
 
         @Override
